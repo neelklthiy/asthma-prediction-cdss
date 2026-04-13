@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediction Result - Asthma CDSS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .result-container {
+            text-align: center;
+            padding: 3rem 2rem;
+        }
+        .prediction-class {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: -webkit-linear-gradient(45deg, #FF6B6B, #4ECDC4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .prediction-negative {
+            background: -webkit-linear-gradient(45deg, #4ECDC4, #556270);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .risk-circle {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            margin: 2rem auto;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.05);
+            box-shadow: 
+                inset 0 0 20px rgba(0,0,0,0.5),
+                0 0 30px {{ color_class | replace('bg-green-500', 'rgba(74, 222, 128, 0.5)') | replace('bg-yellow-500', 'rgba(250, 204, 21, 0.5)') | replace('bg-red-500', 'rgba(248, 113, 113, 0.5)') }};
+            border: 4px solid {{ color_class | replace('bg-green-500', '#4ade80') | replace('bg-yellow-500', '#facc15') | replace('bg-red-500', '#f87171') }};
+            transition: all 0.5s ease;
+        }
+        
+        .risk-score {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #ffffff;
+        }
+        
+        .severity-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+            background-color: {{ color_class | replace('bg-green-500', '#4ade80') | replace('bg-yellow-500', '#facc15') | replace('bg-red-500', '#f87171') }};
+            color: #111;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            margin-top: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(-5px);
+        }
+    </style>
+</head>
+<body>
+    <div class="background-animation"></div>
+    <div class="container fade-in">
+        <div class="glass-panel result-container">
+            <div class="logo" style="margin-bottom: 1rem;">🩺</div>
+            
+            <h1 class="prediction-class {% if result == 'No Asthma' %}prediction-negative{% endif %}">
+                {{ result }}
+            </h1>
+            
+            <div class="severity-badge">
+                Severity: {{ severity }}
+            </div>
+            
+            <p style="color: #cbd5e1; font-size: 1.1rem; max-width: 400px; margin: 0 auto;">
+                The AI model has processed the patient's symptoms and risk factors.
+            </p>
+
+            <div class="risk-circle">
+                <div class="risk-score">
+                    {{ risk_score }}
+                </div>
+            </div>
+            <p style="color: #94a3b8; font-size: 0.9rem; margin-top: -1rem;">Probability of Asthma</p>
+
+            <div style="margin-top: 2.5rem; padding-top: 1.5rem; border-top: 1px solid rgba(255, 255, 255, 0.1);">
+                <p style="color: #cbd5e1;">{{ stats }}</p>
+                <a href="/" class="back-btn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M19 12H5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M12 19L5 12L12 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    New Assessment
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
