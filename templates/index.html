@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asthma Prediction CDSS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="background-animation"></div>
+    <div class="container fade-in">
+        <header>
+            <div class="logo">🫁</div>
+            <h1>AI-Based Asthma Prediction</h1>
+            <p>Clinical Decision Support System for early risk assessment</p>
+        </header>
+
+        {% if error %}
+        <div class="error-msg">
+            {{ error }}
+        </div>
+        {% endif %}
+
+        <form action="/predict" method="POST" class="glass-panel">
+            <h2 class="form-title">Patient Parameters</h2>
+            
+            <div class="form-grid">
+                <!-- Group 1: Basics -->
+                <div class="input-group">
+                    <label for="age">Age</label>
+                    <input type="number" id="age" name="age" required min="1" max="120" placeholder="e.g. 35">
+                </div>
+
+                <div class="input-group">
+                    <label for="gender">Gender</label>
+                    <select id="gender" name="gender" required>
+                        <option value="" disabled selected>Select</option>
+                        <option value="0">Female</option>
+                        <option value="1">Male</option>
+                    </select>
+                </div>
+
+                <!-- Group 2: Lifestyle / History -->
+                <div class="input-group">
+                    <label for="smoking">Smoking</label>
+                    <select id="smoking" name="smoking" required>
+                        <option value="" disabled selected>Select</option>
+                        <option value="0">No</option>
+                        <option value="1">Yes</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label for="family_history">Family History of Asthma</label>
+                    <select id="family_history" name="family_history" required>
+                        <option value="" disabled selected>Select</option>
+                        <option value="0">No</option>
+                        <option value="1">Yes</option>
+                    </select>
+                </div>
+
+                <!-- Group 3: Symptoms -->
+                <div class="input-group">
+                    <label for="wheezing">Wheezing</label>
+                    <select id="wheezing" name="wheezing" required>
+                        <option value="" disabled selected>Select</option>
+                        <option value="0">No</option>
+                        <option value="1">Yes</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label for="shortness_of_breath">Shortness of Breath</label>
+                    <select id="shortness_of_breath" name="shortness_of_breath" required>
+                        <option value="" disabled selected>Select</option>
+                        <option value="0">No</option>
+                        <option value="1">Yes</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label for="chest_tightness">Chest Tightness</label>
+                    <select id="chest_tightness" name="chest_tightness" required>
+                        <option value="" disabled selected>Select</option>
+                        <option value="0">No</option>
+                        <option value="1">Yes</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label for="cough">Cough (esp. at night)</label>
+                    <select id="cough" name="cough" required>
+                        <option value="" disabled selected>Select</option>
+                        <option value="0">No</option>
+                        <option value="1">Yes</option>
+                    </select>
+                </div>
+
+                <!-- Group 4: Environment -->
+                <div class="input-group">
+                    <label for="air_pollution">Air Pollution Exposure</label>
+                    <select id="air_pollution" name="air_pollution" required>
+                        <option value="" disabled selected>Select</option>
+                        <option value="0">Low</option>
+                        <option value="1">Medium</option>
+                        <option value="2">High</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label for="physical_activity">Physical Activity Level</label>
+                    <select id="physical_activity" name="physical_activity" required>
+                        <option value="" disabled selected>Select</option>
+                        <option value="0">Low</option>
+                        <option value="1">Medium</option>
+                        <option value="2">High</option>
+                    </select>
+                </div>
+            </div>
+
+            <button type="submit" class="submit-btn" id="predictBtn">
+                <span>Analyze Patient Data</span>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M5 12H19" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12 5L19 12L12 19" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+        </form>
+    </div>
+
+    <!-- Script to simulate entry -> next field -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const inputs = document.querySelectorAll('input, select');
+            inputs.forEach((input, index) => {
+                input.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        if (index < inputs.length - 1) {
+                            inputs[index + 1].focus();
+                        } else {
+                            document.getElementById('predictBtn').click();
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
